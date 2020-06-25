@@ -6,10 +6,10 @@ from dbc.records.record_iterator import RecordIterator
 
 
 def append_record(record: Record, header: DBCHeader, file: BinaryIO):
-    '''
+    """
     file MUST have write permissions
     this method changes the file's cursor
-    '''
+    """
     # increment record_count
     header.record_count += 1
     file.seek(0)
@@ -21,6 +21,11 @@ def append_record(record: Record, header: DBCHeader, file: BinaryIO):
         file.write(field)
     # write strings...
     file.write('\0'.join(record.strings()).encode())
+
+
+"""
+this method requires the record instance in @records to have an entry field
+"""
 
 
 def find(entry: int, records: RecordIterator) -> Optional[Record]:

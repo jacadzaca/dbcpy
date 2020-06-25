@@ -21,7 +21,7 @@ class DBCHeader():
                 bytes_util.to_bytes(self.string_block_size, 4)]
 
     '''
-    method changes the @file_handle's position
+    method changes the @file_handle's cursor
     @see https://wowdev.wiki/DBC
     '''
     @classmethod
