@@ -29,4 +29,6 @@ this method requires the record instance in @records to have an entry field
 
 
 def find(entry: int, records: RecordIterator) -> Optional[Record]:
+    if entry is None:
+        return None
     return next(filter(lambda item: item.entry == entry, records))
