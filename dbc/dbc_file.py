@@ -31,6 +31,8 @@ class DBCFile():
     """
 
     def add_record(self, entry: int, display_id: int):
+        if self._template is None:
+            raise ValueError('cannot add records if no template was provided')
         template = copy.deepcopy(self._template)
         template.entry = entry
         template.display_id = display_id
@@ -43,7 +45,7 @@ class DBCFile():
     """
     @classmethod
     def from_file_handle(cls, file_handle: BinaryIO,
-                         record_creator, template_entry: int):
+                         record_creator, template_entry: int = None):
         header = DBCHeader.from_file_handle(file_handle)
         records = RecordIterator.create(file_handle, header, record_creator)
         template = dbc.edit.find(template_entry, records)
