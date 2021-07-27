@@ -1,6 +1,6 @@
-import dbc.bytes_util as bytes_util
+import bytes_util as bytes_util
 from typing import BinaryIO
-from dbc.dbc_header import DBCHeader
+from dbc_header import DBCHeader
 
 
 class RecordIterator():
@@ -16,14 +16,10 @@ class RecordIterator():
         return self
 
     def __next__(self):
-        if self._f.tell() > self._calculate_size():
+        if self._f.tell() < self._size:
+            return self._record_creator(*self._read_record())
+        else:
             raise StopIteration
-        return self._record_creator(*self._read_record())
-
-    # we need to calculate size every time,
-    # becouse the number of records can change
-    def _calculate_size(self):
-        return self._header.record_count * self._header.record_size
 
     def _read_record(self):
         return [bytes_util.to_int(self._f.read(self._field_size))
