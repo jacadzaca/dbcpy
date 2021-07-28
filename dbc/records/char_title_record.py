@@ -17,11 +17,17 @@ class CharTitleRecord():
                 for value in self.__dict__.values()])
 
     @classmethod
-    def create_from_bytes(cls, strings, entry, unknown, *args):
-        male_title = tuple(loc.read_dbc_string(offset, strings) for offset in args[0:15])
-        title_male = Loc(*(male_title + args[15:17]))
-        female_title = tuple(loc.read_dbc_string(offset, strings) for offset in args[17:32])
-        title_female = Loc(*(female_title + args[32:34]))
+    def read_record(_, f):
+        field_count = 37
+        int32_size = 4
+        return (bytes_util.to_int(f.read(int32_size)) for _ in range(field_count))
+
+    @classmethod
+    def create_record(cls, strings, entry, unknown, *args):
+        male_title = (loc.read_dbc_string(offset, strings) for offset in args[0:16])
+        title_male = Loc(*male_title, args[16])
+        female_title = (loc.read_dbc_string(offset, strings) for offset in args[17:33])
+        title_female = Loc(*female_title, args[33])
         title_mask_id = args[34]
         return cls(entry, unknown, title_male, title_female, title_mask_id)
 

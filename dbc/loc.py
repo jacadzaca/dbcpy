@@ -24,6 +24,6 @@ class Loc():
     pt_PT: str
     pt_BR: str
     it_IT: str
-    unknown: int
+    unknown: str
     flag: int
 
