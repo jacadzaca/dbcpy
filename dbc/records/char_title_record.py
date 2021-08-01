@@ -12,10 +12,6 @@ class CharTitleRecord():
     female_title: Loc
     title_mask_id: int
 
-    def to_bytes(self):
-        return b''.join([bytes_util.to_bytes(value, 4)
-                for value in self.__dict__.values()])
-
     @classmethod
     def read_record(_, f):
         field_count = 37
