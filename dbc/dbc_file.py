@@ -1,12 +1,16 @@
-import bytes_util
-from records.record_reader import RecordReader
 from dataclasses import dataclass
+
+import bytes_util
 from dbc_header import DBCHeader
+from records.record_reader import RecordReader
 from records.record_iterator import RecordIterator
 from loc import Loc
 
 @dataclass
 class DBCFile():
+    """
+    representation of a DBC file
+    """
     header: DBCHeader
     records: RecordIterator
 

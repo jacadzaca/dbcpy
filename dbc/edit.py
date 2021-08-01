@@ -1,10 +1,9 @@
 import bytes_util
-from dbc_header import DBCHeader
 
 def _record_to_bytes(record):
     int32_size = 4
     return b''.join((bytes_util.to_bytes(value, int32_size)
-            for value in record.__dict__.values()))
+                     for value in record.__dict__.values()))
 
 def write_records(records, header, f):
     """
@@ -21,5 +20,3 @@ def write_records(records, header, f):
     for record in records:
         f.write(_record_to_bytes(record))
 
-def find(entry, records):
-    return next(filter(lambda item: item.entry == entry, records))

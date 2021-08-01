@@ -1,11 +1,12 @@
-from typing import List
-from typing import BinaryIO
-import bytes_util as bytes_util
 from dataclasses import dataclass
+import bytes_util
 
 
 @dataclass()
 class DBCHeader():
+    """
+    represents a DBC's file header
+    """
     magic: str
     record_count: int
     field_count: int
@@ -13,19 +14,18 @@ class DBCHeader():
     string_block_size: int
     size: int
 
-    def to_bytes(self) -> List[bytes]:
-        return b''.join([self.magic,
-                bytes_util.to_bytes(self.record_count, 4),
-                bytes_util.to_bytes(self.field_count, 4),
-                bytes_util.to_bytes(self.record_size, 4),
-                bytes_util.to_bytes(self.string_block_size, 4)])
+    def to_bytes(self):
+        return b''.join((self.magic,
+                         bytes_util.to_bytes(self.record_count, 4),
+                         bytes_util.to_bytes(self.field_count, 4),
+                         bytes_util.to_bytes(self.record_size, 4),
+                         bytes_util.to_bytes(self.string_block_size, 4)))
 
-    '''
-    method changes the @file_handle's cursor
-    @see https://wowdev.wiki/DBC
-    '''
     @classmethod
-    def from_file_handle(cls, file_handle: BinaryIO):
+    def from_file_handle(cls, file_handle):
+        """
+        @see https://wowdev.wiki/DBC#Structure
+        """
         file_handle.seek(0)
         size = 4 * 5
         header_bytes = file_handle.read(size)

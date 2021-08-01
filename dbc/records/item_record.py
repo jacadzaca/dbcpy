@@ -1,5 +1,4 @@
 import dataclasses
-import bytes_util
 
 _fields = {
     'entry': int,

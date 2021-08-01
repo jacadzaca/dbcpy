@@ -1,6 +1,4 @@
-import bytes_util as bytes_util
 import dataclasses
-import loc
 from loc import Loc
 
 _fields = {

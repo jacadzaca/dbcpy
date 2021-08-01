@@ -11,19 +11,19 @@ def read_dbc_string(offset, strings):
 class Loc():
     en_us: str
     en_gb: str
-    ko_KR: str
-    fr_FR: str
-    de_DE: str
-    en_CN: str
-    zh_CN: str
-    en_TW: str
-    zh_TW: str
-    es_ES: str
-    es_MX: str
-    ru_RU: str
-    pt_PT: str
-    pt_BR: str
-    it_IT: str
+    ko_kr: str
+    fr_fr: str
+    de_de: str
+    en_cn: str
+    zh_cn: str
+    en_tw: str
+    zh_tw: str
+    es_es: str
+    es_mx: str
+    ru_ru: str
+    pt_pt: str
+    pt_br: str
+    it_it: str
     unknown: str
     flag: int
 
