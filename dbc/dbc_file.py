@@ -1,4 +1,5 @@
 import bytes_util
+from records.record_reader import RecordReader
 from dataclasses import dataclass
 from dbc_header import DBCHeader
 from records.record_iterator import RecordIterator
@@ -36,6 +37,6 @@ class DBCFile():
         header = DBCHeader.from_file_handle(f)
         f.seek(header.size + header.record_size * header.record_count)
         string_block = f.read()
-        records = RecordIterator(f, header, record_type.read_record, record_type.create_record, string_block)
+        records = RecordIterator(f, header, RecordReader(record_type), string_block)
         return cls(header, records)
 
