@@ -25,22 +25,20 @@ class DBCFile():
 
         for record in self.records:
             for field in record.__dict__.values():
-                if isinstance(field, int):
-                    f.write(bytes_util.to_bytes(field, 4))
-                elif isinstance(field, float):
-                    f.write(bytes_util.float_to_bytes(field))
-                elif isinstance(field, Loc):
+                if isinstance(field, Loc):
                     for string in itertools.islice(field.__dict__.values(), 16):
                         if string:
-                            f.write(bytes_util.to_bytes(string_block_size, 4))
+                            f.write(bytes_util.to_bytes(string_block_size))
                             pos = f.tell()
                             f.seek(string_block_offset + string_block_size)
                             f.write((string + '\0').encode('utf-8'))
                             string_block_size += len(string + '\0')
                             f.seek(pos)
                         else:
-                            f.write(bytes_util.to_bytes(0, 4))
-                    f.write(bytes_util.to_bytes(field.flag, 4))
+                            f.write(bytes_util.to_bytes(0))
+                    f.write(bytes_util.to_bytes(field.flag))
+                else:
+                    f.write(bytes_util.to_bytes(field))
 
         f.seek(0)
         self.header.string_block_size = string_block_size

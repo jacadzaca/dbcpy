@@ -12,5 +12,12 @@ def to_float(byttes):
 def float_to_bytes(floatt):
     return struct.pack('f', floatt)
 
-def to_bytes(intt, field_size):
-    return intt.to_bytes(field_size, byteorder='little', signed=True)
+def to_bytes(x):
+    if isinstance(x, int):
+        int32_size = 4
+        return x.to_bytes(int32_size, byteorder='little', signed=True)
+    elif isinstance(x, float):
+        return struct.pack('f', x)
+    else:
+        raise ValueError('to_bytes only converts ints and floats')
+

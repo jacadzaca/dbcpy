@@ -16,10 +16,10 @@ class DBCHeader():
 
     def to_bytes(self):
         return b''.join((self.magic,
-                         bytes_util.to_bytes(self.record_count, 4),
-                         bytes_util.to_bytes(self.field_count, 4),
-                         bytes_util.to_bytes(self.record_size, 4),
-                         bytes_util.to_bytes(self.string_block_size, 4)))
+                         bytes_util.to_bytes(self.record_count),
+                         bytes_util.to_bytes(self.field_count),
+                         bytes_util.to_bytes(self.record_size),
+                         bytes_util.to_bytes(self.string_block_size)))
 
     @classmethod
     def from_file_handle(cls, file_handle):

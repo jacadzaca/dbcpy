@@ -1,8 +1,7 @@
 import bytes_util
 
 def _record_to_bytes(record):
-    int32_size = 4
-    return b''.join((bytes_util.to_bytes(value, int32_size)
+    return b''.join((bytes_util.to_bytes(value)
                      for value in record.__dict__.values()))
 
 def write_records(records, header, f):
