@@ -1,3 +1,4 @@
+import itertools
 from dataclasses import dataclass
 import bytes_util
 from dbc_header import DBCHeader
@@ -14,37 +15,35 @@ class DBCFile():
     records: RecordIterator
 
     def write_to_file(self, f):
-        string_block = [b'\0']
-        string_block_offset = 1
-        # write header, reserving the first 20 bytes
-        f.write(self.header.to_bytes())
-        # count the records, so we can modify the header later
-        record_count = 0
+        string_block_offset = self.header.size + self.header.record_count * self.header.record_size
+        f.seek(string_block_offset)
+        f.write(b'\0')
+        string_block_size = 1
+
+        # reserve the first 20 bytes for the header
+        f.seek(self.header.size)
+
         for record in self.records:
-            record_count += 1
             for field in record.__dict__.values():
                 if isinstance(field, int):
                     f.write(bytes_util.to_bytes(field, 4))
-                if isinstance(field, float):
+                elif isinstance(field, float):
                     f.write(bytes_util.float_to_bytes(field))
                 elif isinstance(field, Loc):
-                    # basicly all fields from 0 through 16
-                    strings = [[0, value.encode('utf-8')] for value in field.__dict__.values() if isinstance(value, str)]
-                    for i, string in enumerate(strings):
-                        if string[1]:
-                            string[1] += b'\0'
-                            string_block.append(string[1])
-                            strings[i][0] = string_block_offset
-                            string_block_offset += len(string[1])
-                        f.write(bytes_util.to_bytes(strings[i][0], 4))
-                    # the last, 17th field
+                    for string in itertools.islice(field.__dict__.values(), 16):
+                        if string:
+                            f.write(bytes_util.to_bytes(string_block_size, 4))
+                            pos = f.tell()
+                            f.seek(string_block_offset + string_block_size)
+                            f.write((string + '\0').encode('utf-8'))
+                            string_block_size += len(string + '\0')
+                            f.seek(pos)
+                        else:
+                            f.write(bytes_util.to_bytes(0, 4))
                     f.write(bytes_util.to_bytes(field.flag, 4))
-        string_block = b''.join(string_block)
-        f.write(string_block)
-        # write the proper header
+
         f.seek(0)
-        self.header.record_count = record_count
-        self.header.string_block_size = len(string_block)
+        self.header.string_block_size = string_block_size
         f.write(self.header.to_bytes())
 
     @classmethod

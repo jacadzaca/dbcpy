@@ -13,6 +13,8 @@ class RecordIterator():
         self._new_records = new_records
 
     def add_records(self, *records):
+        self._header.record_count += len(records)
+
         self._new_records = itertools.chain(self._new_records, iter(records))
 
     def __iter__(self):
