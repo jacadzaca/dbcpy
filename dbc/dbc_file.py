@@ -25,6 +25,8 @@ class DBCFile():
             for field in record.__dict__.values():
                 if isinstance(field, int):
                     f.write(bytes_util.to_bytes(field, 4))
+                if isinstance(field, float):
+                    f.write(bytes_util.float_to_bytes(field))
                 elif isinstance(field, Loc):
                     # basicly all fields from 0 through 16
                     strings = [[0, value.encode('utf-8')] for value in field.__dict__.values() if isinstance(value, str)]
