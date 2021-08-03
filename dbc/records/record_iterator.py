@@ -1,4 +1,5 @@
 import itertools
+import bytes_util
 
 class RecordIterator():
     """
@@ -16,6 +17,24 @@ class RecordIterator():
         self._header.record_count += len(records)
 
         self._new_records = itertools.chain(self._new_records, iter(records))
+
+    def find(self, entry):
+        int32_size = 4
+
+        low = 0
+        high = self._header.record_count - 1
+        while low <= high:
+            i = low + ((high - low) // 2)
+            self._f.seek(self._header.size + self._header.record_size * i)
+            found_entry = bytes_util.to_int(self._f.read(int32_size))
+            if found_entry == entry:
+                self._f.seek(-int32_size, 1)
+                return self._record_reader.read_record(self._string_block, self._f)
+            elif found_entry < entry:
+                low = i + 1
+            else:
+                high = i - 1
+        raise ValueError(f'{entry} is not in this dbc file')
 
     def __iter__(self):
         self._f.seek(self._header.size)

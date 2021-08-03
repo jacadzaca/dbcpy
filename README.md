@@ -7,7 +7,7 @@ If this library dose not fit your use case, please consider using [pywowlib](htt
 pywowlib's README states that reading/writing DBCs is not possible, [the features seem to be already implemented](https://github.com/wowdev/pywowlib/blob/master/wdbx/wdbc.py).
 
 ## Examples
-##### Modifying an Item.dbc entry's display id (will take about 1.6s)
+##### Modifying an Item.dbc entry's display id
 
 ```python
 #!/usr/bin/env python3
@@ -17,7 +17,7 @@ from records.item_record import ItemRecord
 if __name__ == '__main__':
     with open('Item.dbc', 'r+b') as f:
         dbc_file = DBCFile.from_file(f, ItemRecord)
-        some_item = next(filter(lambda item: item.entry == 873, dbc_file.records))
+        some_item = dbc_file.find(873)
         some_item.entry = 56807
         some_item.display_id = 20300
         dbc_file.records.add_records(some_item)
@@ -26,13 +26,13 @@ if __name__ == '__main__':
 
     with open('Item.dbc.new', 'r+b') as f:
         dbc_file = DBCFile.from_file(f, ItemRecord)
-        the_item = next(filter(lambda spell: spell.entry == 56807, dbc_file.records))
+        the_item = dbc_file.find(56807)
         print(the_item.entry)
         print(the_item.display_id)
 
 ```
 
-##### Adding an Spell.dbc entry with a modified name (will take about 45 seconds):
+##### Adding an Spell.dbc entry with a modified name (will take about 30 seconds):
 
 ```python
 #!/usr/bin/env python3
@@ -42,7 +42,7 @@ from records.spell_record import SpellRecord
 if __name__ == '__main__':
     with open('Spell.dbc', 'r+b') as f:
         dbc_file = DBCFile.from_file(f, SpellRecord)
-        some_spell = next(filter(lambda spell: spell.entry == 116, dbc_file.records))
+        some_spell = dbc_file.records.find(116)
         some_spell.name.en_us = 'New spell name'
         some_spell.entry = 80865
         dbc_file.records.add_records(some_spell)
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     with open('Spell.dbc.new', 'r+b') as f:
         dbc_file = DBCFile.from_file(f, SpellRecord)
-        the_spell = next(filter(lambda spell: spell.entry == 80865, dbc_file.records))
+        the_spell = dbc_file.find(80865)
         print(the_spell.name.en_us)
 
 ```
