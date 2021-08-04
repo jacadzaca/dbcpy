@@ -1,22 +1,40 @@
 import itertools
 import bytes_util
+from loc import Loc
 
 class RecordIterator():
     """
     iterator for... iterating over records stored in a DBC file
     """
-    def __init__(self, f, dbc_header, record_reader, string_block, new_records=iter([])):
+    def __init__(self, f, dbc_header, record_reader, string_block):
         self._f = f
         self._header = dbc_header
         self._record_reader = record_reader
         self._string_block = string_block
-        self._size = dbc_header.record_count * dbc_header.record_size
-        self._new_records = new_records
 
-    def add_records(self, *records):
+    def append(self, *records):
+        self._f.seek(self._header.size + self._size())
         self._header.record_count += len(records)
 
-        self._new_records = itertools.chain(self._new_records, iter(records))
+        for record in records:
+            for field in record.__dict__.values():
+                if isinstance(field, Loc):
+                    for string in itertools.islice(field.__dict__.values(), 16):
+                        if string:
+                            self._f.write(bytes_util.to_bytes(self._header.string_block_size))
+                            string = (string + '\0').encode('utf-8')
+                            self._string_block += string
+                            self._header.string_block_size += len(string)
+                        else:
+                            self._f.write(bytes_util.to_bytes(0))
+                    self._f.write(bytes_util.to_bytes(field.flag))
+                else:
+                    self._f.write(bytes_util.to_bytes(field))
+
+        self._f.write(self._string_block)
+
+        self._f.seek(0)
+        self._f.write(self._header.to_bytes())
 
     def find(self, entry):
         int32_size = 4
@@ -36,12 +54,15 @@ class RecordIterator():
                 high = i - 1
         raise ValueError(f'{entry} is not in this dbc file')
 
+    def _size(self):
+        return self._header.record_count * self._header.record_size
+
     def __iter__(self):
         self._f.seek(self._header.size)
         return self
 
     def __next__(self):
-        if self._f.tell() < self._size:
+        if self._f.tell() < self._size():
             return self._record_reader.read_record(self._string_block, self._f)
-        return next(self._new_records)
+        raise StopIteration()
 
