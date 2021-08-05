@@ -1,6 +1,6 @@
-import loc
-import bytes_util
-from loc import Loc
+import dbcpy.loc as loc
+import dbcpy.bytes_util as bytes_util
+from dbcpy.loc import Loc
 
 class RecordReader():
     def __init__(self, record_type):

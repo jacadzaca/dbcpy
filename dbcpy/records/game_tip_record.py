@@ -1,5 +1,5 @@
 import dataclasses
-from loc import Loc
+from dbcpy.loc import Loc
 
 _fields = {
     'entry': int,

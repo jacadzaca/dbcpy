@@ -1,6 +1,6 @@
 import itertools
-import bytes_util
-from loc import Loc
+import dbcpy.bytes_util as bytes_util
+from dbcpy.loc import Loc
 
 class RecordIterator():
     """

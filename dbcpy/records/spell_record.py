@@ -1,5 +1,5 @@
 import dataclasses
-from loc import Loc
+from dbcpy.loc import Loc
 
 # @see https://wowdev.wiki/DB/Spell#3.3.5.12340
 _fields = {

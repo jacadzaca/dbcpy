@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-import bytes_util
+import dbcpy.bytes_util as bytes_util
 
 
 @dataclass()

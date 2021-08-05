@@ -1,10 +1,11 @@
 import itertools
 from dataclasses import dataclass
-import bytes_util
-from dbc_header import DBCHeader
-from records.record_reader import RecordReader
-from records.record_iterator import RecordIterator
-from loc import Loc
+
+import dbcpy.bytes_util as bytes_util
+from dbcpy.dbc_header import DBCHeader
+from dbcpy.records.record_reader import RecordReader
+from dbcpy.records.record_iterator import RecordIterator
+from dbcpy.loc import Loc
 
 @dataclass
 class DBCFile():
@@ -14,7 +15,7 @@ class DBCFile():
     header: DBCHeader
     records: RecordIterator
 
-    def write_to_file(self, f):
+    def write_to_file(self, transform, f):
         string_block_offset = self.header.size + self.header.record_count * self.header.record_size
         f.seek(string_block_offset)
         f.write(b'\0')
@@ -23,7 +24,7 @@ class DBCFile():
         # reserve the first 20 bytes for the header
         f.seek(self.header.size)
 
-        for record in self.records:
+        for record in map(transform, self.records):
             for field in record.__dict__.values():
                 if isinstance(field, Loc):
                     for string in itertools.islice(field.__dict__.values(), 16):
