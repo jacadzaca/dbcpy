@@ -16,6 +16,7 @@ class RecordIterator():
         self._f.seek(self._header.size + self._size())
         self._header.record_count += len(records)
 
+        new_strings = []
         for record in records:
             for field in record.__dict__.values():
                 if isinstance(field, Loc):
@@ -23,7 +24,7 @@ class RecordIterator():
                         if string:
                             self._f.write(bytes_util.to_bytes(self._header.string_block_size))
                             string = (string + '\0').encode('utf-8')
-                            self._string_block += string
+                            new_strings.append(string)
                             self._header.string_block_size += len(string)
                         else:
                             self._f.write(bytes_util.to_bytes(0))
@@ -32,6 +33,7 @@ class RecordIterator():
                     self._f.write(bytes_util.to_bytes(field))
 
         self._f.write(self._string_block)
+        self._f.write(b''.join(new_strings))
 
         self._f.seek(0)
         self._f.write(self._header.to_bytes())
