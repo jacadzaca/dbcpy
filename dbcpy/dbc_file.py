@@ -32,8 +32,9 @@ class DBCFile():
                             f.write(bytes_util.to_bytes(string_block_size))
                             pos = f.tell()
                             f.seek(string_block_offset + string_block_size)
-                            f.write((string + '\0').encode('utf-8'))
-                            string_block_size += len(string + '\0')
+                            string = string.encode('utf-8') + b'\0'
+                            f.write(string)
+                            string_block_size += len(string)
                             f.seek(pos)
                         else:
                             f.write(bytes_util.to_bytes(0))
