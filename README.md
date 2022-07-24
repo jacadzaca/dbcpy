@@ -4,14 +4,14 @@ The library was only tested with 3.3.5a DBCs and a [TrinityCore](https://www.tri
 If this library dose not fit your use case, please consider using [pywowlib](https://github.com/wowdev/pywowlib/). Although
 pywowlib's README states that reading/writing DBCs is not possible, [the features seem to be already implemented](https://github.com/wowdev/pywowlib/blob/master/wdbx/wdbc.py).
 
-## Records
-dbcpy dose NOT use [WoWDBDefs](https://github.com/wowdev/WoWDBDefs) to parse the DBCs.
-DBC representations must be added manually, for a list of supported DBCs see [records](https://github.com/jacadzaca/dbcpy/tree/master/dbcpy/records)
-
 ## Instalation
 ```bash
 pip install dbcpy
 ```
+
+## Records
+dbcpy dose NOT use [WoWDBDefs](https://github.com/wowdev/WoWDBDefs) to parse the DBCs.
+DBC representations must be added manually, for a list of supported DBCs see [records](https://github.com/jacadzaca/dbcpy/tree/master/dbcpy/records)
 
 ##### Adding records
 Adding a record is easy. Just pick a copy-paste the definition from [here](https://wowdev.wiki/Category:DBC_WotLK)
@@ -114,6 +114,11 @@ Well, not always. In order to modify an existing record, we must rewrite the who
 The SpellRecord is especially *large* and the [RecordReader.read_record](https://github.com/jacadzaca/dbcpy/blob/master/dbcpy/records/record_reader.py)
 method is not suited for reading *large* records like that. It handles smaller records (like ItemRecord) well enough (~1 second).
 The simplest fix would be to implement a SpellRecord specific RecordReader.
+
+## How to contribute?
+1. Ensure that your commits have meaningful comments
+2. If your contribution is small (e.g it fixes a minor bug) increment revision (the last digit of version) in [setup.py](https://github.com/jacadzaca/dbcpy/blob/master/setup.py)
+3. Provide test-cases
 
 ## Legal Note
 World of Warcraft is a registered trademark of Blizzard Entertainment and/or other respective owners.
