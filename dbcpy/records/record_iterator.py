@@ -29,6 +29,14 @@ class RecordIterator():
                         else:
                             self._f.write(bytes_util.to_bytes(0))
                     self._f.write(bytes_util.to_bytes(field.flag))
+                elif isinstance(field, str):
+                    if field:
+                        self._f.write(bytes_util.to_bytes(self._header.string_block_size))
+                        string = (field + '\0').encode('utf-8')
+                        new_strings.append(string)
+                        self._header.string_block_size += len(string)
+                    else:
+                        self._f.write(bytes_util.to_bytes(0))
                 else:
                     self._f.write(bytes_util.to_bytes(field))
 
