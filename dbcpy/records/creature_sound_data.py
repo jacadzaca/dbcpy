@@ -1,0 +1,46 @@
+import dataclasses
+
+_fields = {
+    'id': int,
+    'sound_exertion_id': int,
+    'sound_exertion_critical_id': int,
+    'sound_injury_id': int,
+    'sound_injury_Critical_id': int,
+    'sound_injury_crushing_blow_id': int,
+    'sound_death_id': int,
+    'sound_stun_id': int,
+    'sound_stand_id': int,
+    'sound_footstep_id': int,
+    'sound_aggro_id': int,
+    'sound_wing_flap_id': int,
+    'sound_wing_glide_id': int,
+    'sound_alert_id': int,
+    'sound_fidget_1': int,
+    'sound_fidget_2': int,
+    'sound_fidget_3': int,
+    'sound_fidget_4': int,
+    'sound_fidget_5': int,
+    'custom_attack_1': int,
+    'custom_attack_2': int,
+    'custom_attack_3': int,
+    'custom_attack_4': int,
+    'npc_sound_id': int,
+    'loop_sound_id': int,
+    'creature_impact_type': int,
+    'sound_jump_start_id': int,
+    'sound_jump_end_id': int,
+    'sound_pet_attack_id': int,
+    'sound_pet_order_id': int,
+    'sound_pet_dismiss_id': int,
+    'fidget_delay_seconds_min': float,
+    'fidget_delay_seconds_max': float,
+    'birth_sound_id': int,
+    'spell_cast_directed_sound_id': int,
+    'submerge_sound_id_1': int,
+    'submerged_sound_id_2': int,
+    'creature_sound_data_id_pet': int,
+}
+
+CreatureSoundDataRecord = dataclasses.make_dataclass('CreatureSoundDataRecord ', zip(_fields.keys(), _fields.values()))
+CreatureSoundDataRecord.field_types = staticmethod(_fields.values())
+
