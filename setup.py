@@ -6,7 +6,7 @@ with open('README.md') as f:
 
 setup(
     name='dbcpy',
-    version='1.0.8',
+    version='1.0.9',
     description="simple python library for reading WoW's DBC files",
     long_description=readme,
     long_description_content_type='text/markdown',
